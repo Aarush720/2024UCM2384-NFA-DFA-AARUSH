@@ -1,0 +1,6 @@
+{
+  "name": "Subset Construction Engine",
+  "description": "An interactive, visual tool for learning NFA to DFA conversion through subset construction.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
