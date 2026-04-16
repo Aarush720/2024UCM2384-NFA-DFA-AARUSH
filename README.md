@@ -1,39 +1,37 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Aurelia - NFA to DFA Visualizer
 
-# Run and deploy your AI Studio app
+Interactive educational visualizer for NFA to DFA subset construction, with guided step insight and live word tracing.
 
-This contains everything you need to run your app locally.
+## Prerequisites
 
-View your app in AI Studio: https://ai.studio/apps/a09544ec-3cec-4b59-8263-3ad16354ad60
+- Node.js 20+
 
-## Run Locally
-
-**Prerequisites:**  Node.js
-
+## Local Development
 
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+   `npm ci`
+2. Start dev server:
    `npm run dev`
+3. Open:
+   `http://localhost:3000`
 
-## Deploy On Vercel
+## Quality Checks
 
-This project is configured for Vercel with [vercel.json](vercel.json):
+- Typecheck: `npm run typecheck`
+- Production build: `npm run build`
 
-- Framework: `vite`
-- Install Command: `npm ci`
-- Build Command: `npm run build`
-- Output Directory: `dist`
+## Deploy to Vercel
+
+This repo already includes [vercel.json](vercel.json) configured for Vite.
 
 ### Steps
 
-1. Push this repo to GitHub.
-2. In Vercel, click **New Project** and import the repository.
-3. In Project Settings > Environment Variables, add:
-   - `GEMINI_API_KEY` (same value you use locally)
+1. Push repository to GitHub.
+2. In Vercel, create a new project and import the repo.
+3. Keep default settings from `vercel.json`:
+   - Install command: `npm ci`
+   - Build command: `npm run build`
+   - Output directory: `dist`
 4. Deploy.
 
-No app behavior or UI changes are required for deployment.
+No runtime secrets are required for the current app.

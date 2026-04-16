@@ -74,6 +74,14 @@ export function Tool() {
   const nodeTypes = useMemo(() => ({ animated: AnimatedNode }), []);
   const edgeTypes = useMemo(() => ({ animated: AnimatedEdge }), []);
 
+  const goHome = useCallback(() => {
+    setIsAutoPlaying(false);
+    setIsTestAutoPlaying(false);
+    setFullscreenDiagram('none');
+    setActiveTab('construction');
+    useAutomataStore.getState().goHome();
+  }, []);
+
   const stepInsight = useMemo(() => {
     const currentSubsetId = currentSubset ? getSubsetId(currentSubset) : '-';
     const moveSubsetId = reachableStates ? getSubsetId(reachableStates) : '-';
@@ -345,21 +353,26 @@ export function Tool() {
   }, [dfa]);
 
   return (
-    <div className="h-screen w-full flex flex-col bg-black text-white overflow-hidden font-sans">
+    <div className="viz-shell h-screen w-full flex flex-col bg-black text-white overflow-hidden font-sans">
       {/* Top Bar */}
-      <nav className="flex justify-between items-center px-10 h-[60px] box-border shrink-0">
-        <div className="text-[14px] tracking-[4px] font-bold">AUTOMA.PRO</div>
-        <div className="flex gap-8">
-          <div onClick={() => setActiveTab('construction')} className={`text-[11px] uppercase tracking-[2px] cursor-pointer ${activeTab === 'construction' ? 'text-white' : 'text-[#888]'}`}>01. Construction</div>
-          <div className="text-[11px] uppercase tracking-[2px] text-[#888] cursor-not-allowed opacity-50">02. E-Closure</div>
-          <div className="text-[11px] uppercase tracking-[2px] text-[#888] cursor-not-allowed opacity-50">03. Equivalence</div>
-          <div onClick={() => setActiveTab('testing')} className={`text-[11px] uppercase tracking-[2px] cursor-pointer ${activeTab === 'testing' ? 'text-white' : 'text-[#888]'}`}>04. Testing</div>
+      <nav className="flex items-center gap-6 px-10 h-[68px] box-border shrink-0 border-b border-[var(--viz-border)] bg-[linear-gradient(90deg,rgba(212,83,3,0.08),rgba(0,0,0,0))]">
+        <button
+          onClick={goHome}
+          className="shrink-0 text-[16px] tracking-[4px] font-bold text-[#fff4ea] transition-colors hover:text-[#ffd7bc]"
+        >
+          AURELIA
+        </button>
+        <div className="flex items-center gap-4 min-w-0">
+          <div onClick={() => setActiveTab('construction')} className={`text-[12px] uppercase tracking-[2px] px-4 py-2 rounded-[10px] border transition-colors cursor-pointer ${activeTab === 'construction' ? 'text-[#fff4ea] border-[rgba(212,83,3,0.7)] bg-[rgba(212,83,3,0.14)]' : 'text-[var(--viz-text-muted)] border-[rgba(255,255,255,0.12)] hover:text-[#ffd7bc] hover:border-[rgba(212,83,3,0.55)]'}`}>01. Construction</div>
+          <div className="text-[12px] uppercase tracking-[2px] px-4 py-2 rounded-[10px] border border-[rgba(255,255,255,0.12)] text-[var(--viz-text-muted)] cursor-not-allowed opacity-55">02. E-Closure</div>
+          <div className="text-[12px] uppercase tracking-[2px] px-4 py-2 rounded-[10px] border border-[rgba(255,255,255,0.12)] text-[var(--viz-text-muted)] cursor-not-allowed opacity-55">03. Equivalence</div>
+          <div onClick={() => setActiveTab('testing')} className={`text-[12px] uppercase tracking-[2px] px-4 py-2 rounded-[10px] border transition-colors cursor-pointer ${activeTab === 'testing' ? 'text-[#fff4ea] border-[rgba(212,83,3,0.7)] bg-[rgba(212,83,3,0.14)]' : 'text-[var(--viz-text-muted)] border-[rgba(255,255,255,0.12)] hover:text-[#ffd7bc] hover:border-[rgba(212,83,3,0.55)]'}`}>04. Testing</div>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="ml-auto flex gap-4 items-center min-w-0">
           {activeTab === 'construction' ? (
             <>
-              <div className="flex items-center gap-2 mr-4">
-                <span className="text-[10px] uppercase tracking-[1px] text-[#888]">Speed</span>
+              <div className="flex items-center gap-2 mr-1">
+                <span className="text-[11px] uppercase tracking-[1px] text-[var(--viz-text-muted)]">Speed</span>
                 <input
                   type="range"
                   min="50"
@@ -367,43 +380,43 @@ export function Tool() {
                   step="50"
                   value={1550 - autoPlaySpeed}
                   onChange={(e) => setAutoPlaySpeed(1550 - Number(e.target.value))}
-                  className="w-20 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[var(--color-accent)]"
+                  className="w-24 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[var(--viz-accent)]"
                 />
               </div>
-              <button onClick={() => useAutomataStore.getState().reset()} className="text-[11px] uppercase tracking-[2px] text-[#888] hover:text-white transition-colors cursor-pointer bg-transparent border-none">
+              <button onClick={() => useAutomataStore.getState().reset()} className="viz-btn-ghost text-[12px] uppercase tracking-[2px]">
                 Reset
               </button>
-              <button onClick={() => setIsAutoPlaying(!isAutoPlaying)} className={`text-[11px] uppercase tracking-[2px] px-4 py-1.5 rounded-[20px] border transition-colors cursor-pointer ${isAutoPlaying ? 'border-[#EDC001] text-black bg-[#EDC001]' : 'border-[#EDC001] text-[#EDC001] bg-transparent'}`}>
+              <button onClick={() => setIsAutoPlaying(!isAutoPlaying)} className={`viz-btn text-[12px] uppercase tracking-[2px] px-4 py-2 ${isAutoPlaying ? 'viz-btn-primary' : 'viz-btn-outline'}`}>
                 {isAutoPlaying ? 'Pause Auto' : 'Auto Mode'}
               </button>
-              <button onClick={stepForwardTeaching} disabled={isAutoPlaying || activePhase === 4} className="text-[11px] uppercase tracking-[2px] text-[#888] hover:text-white transition-colors disabled:opacity-50 cursor-pointer bg-transparent border-none">
+              <button onClick={stepForwardTeaching} disabled={isAutoPlaying || activePhase === 4} className="viz-btn-ghost text-[12px] uppercase tracking-[2px] disabled:opacity-50">
                 Next Step
               </button>
-              <button onClick={stepBackwardTeaching} disabled={isAutoPlaying || !canStepBackward} className="text-[11px] uppercase tracking-[2px] text-[#888] hover:text-white transition-colors disabled:opacity-50 cursor-pointer bg-transparent border-none">
+              <button onClick={stepBackwardTeaching} disabled={isAutoPlaying || !canStepBackward} className="viz-btn-ghost text-[12px] uppercase tracking-[2px] disabled:opacity-50">
                 Previous Step
               </button>
-              <div className="w-[1px] h-4 bg-white/10 mx-2" />
+              <div className="w-[1px] h-4 bg-white/10 mx-1" />
               <button 
                 onClick={() => setIsCustomModalOpen(true)}
-                className="text-[10px] uppercase tracking-[2px] px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all flex items-center gap-2"
+                className="viz-btn-outline text-[11px] uppercase tracking-[2px] px-3 py-2 rounded-lg transition-all flex items-center gap-2"
               >
-                <Plus size={12} className="text-[var(--color-accent)]" />
+                <Plus size={13} className="text-[var(--viz-accent)]" />
                 Custom NFA
               </button>
             </>
           ) : (
             <>
-              <button onClick={() => { resetTest(); setIsTestAutoPlaying(false); }} className="text-[11px] uppercase tracking-[2px] text-[#888] hover:text-white transition-colors cursor-pointer bg-transparent border-none">
+              <button onClick={() => { resetTest(); setIsTestAutoPlaying(false); }} className="viz-btn-ghost text-[12px] uppercase tracking-[2px]">
                 Reset Test
               </button>
               <button
                 onClick={() => setIsTestAutoPlaying(!isTestAutoPlaying)}
                 disabled={!testInput || testStatus === 'accepted' || testStatus === 'rejected'}
-                className={`text-[11px] uppercase tracking-[2px] px-4 py-1.5 rounded-[20px] border transition-colors cursor-pointer disabled:opacity-50 ${isTestAutoPlaying ? 'border-[var(--color-accent)] text-[var(--color-accent)]' : 'border-white text-white'}`}
+                className={`viz-btn text-[12px] uppercase tracking-[2px] px-4 py-2 disabled:opacity-50 ${isTestAutoPlaying ? 'viz-btn-outline-active' : 'viz-btn-outline'}`}
               >
                 {isTestAutoPlaying ? 'Pause Auto' : 'Auto Trace'}
               </button>
-              <button onClick={testStatus === 'idle' ? startTest : stepTest} disabled={isTestAutoPlaying || testStatus === 'accepted' || testStatus === 'rejected' || !testInput} className="text-[11px] uppercase tracking-[2px] px-4 py-1.5 rounded-[20px] border border-white text-white bg-transparent transition-colors cursor-pointer disabled:opacity-50">
+              <button onClick={testStatus === 'idle' ? startTest : stepTest} disabled={isTestAutoPlaying || testStatus === 'accepted' || testStatus === 'rejected' || !testInput} className="viz-btn-primary text-[12px] uppercase tracking-[2px] px-4 py-2 disabled:opacity-50">
                 {testStatus === 'idle' ? 'Start Trace' : 'Next Step'}
               </button>
             </>
@@ -412,17 +425,17 @@ export function Tool() {
       </nav>
 
       {/* Main Split Screen */}
-      <div className={`flex-1 grid gap-[1px] bg-[var(--color-glass-border)] border-t border-[var(--color-glass-border)] mb-[48px] ${fullscreenDiagram === 'none' ? 'grid-cols-3' : 'grid-cols-1'}`}>
+      <div className={`flex-1 grid gap-[1px] bg-[var(--viz-border)] border-t border-[var(--viz-border)] mb-[60px] ${fullscreenDiagram === 'none' ? 'grid-cols-3' : 'grid-cols-1'}`}>
         {/* Left: NFA Graph */}
         {fullscreenDiagram !== 'dfa' && (
-        <div className="bg-black p-6 flex flex-col">
+        <div className="bg-[var(--viz-panel-bg)] p-6 flex flex-col">
           <div className="flex justify-between mb-5">
-            <span className="text-[11px] uppercase tracking-[1px] text-[#888]">NFA Source Graph</span>
+            <span className="text-[12px] uppercase tracking-[1px] text-[var(--viz-text-muted)]">NFA Source Graph</span>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] px-2 py-0.5 border border-[#555] text-[#555] rounded-[10px]">Static</span>
+              <span className="text-[11px] px-2 py-1 border border-[var(--viz-border)] text-[var(--viz-text-muted)] rounded-[10px]">Static</span>
               <button
                 onClick={() => setFullscreenDiagram(fullscreenDiagram === 'nfa' ? 'none' : 'nfa')}
-                className="text-[10px] px-2 py-0.5 border border-white/20 rounded-[10px] text-white hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors flex items-center gap-1"
+                className="viz-btn-outline text-[11px] px-2 py-1 rounded-[10px] transition-colors flex items-center gap-1"
               >
                 {fullscreenDiagram === 'nfa' ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
                 {fullscreenDiagram === 'nfa' ? 'Exit Fullscreen' : 'Fullscreen'}
@@ -447,22 +460,22 @@ export function Tool() {
 
         {/* Middle: Transition Table & Explorer */}
         {fullscreenDiagram === 'none' && (
-        <div className="bg-black p-6 flex flex-col border-l border-r border-[var(--color-glass-border)] overflow-hidden">
+        <div className="bg-[var(--viz-panel-bg)] p-6 flex flex-col border-l border-r border-[var(--viz-border)] overflow-hidden">
           {activeTab === 'construction' ? (
             <>
               <div className="flex justify-between mb-5">
-                <span className="text-[11px] uppercase tracking-[1px] text-[#888]">Transition Mapping</span>
-                <span className="text-[10px] px-2 py-0.5 border border-[var(--color-accent)] text-[var(--color-accent)] rounded-[10px]">Phase {activePhase}</span>
+                <span className="text-[12px] uppercase tracking-[1px] text-[var(--viz-text-muted)]">Transition Mapping</span>
+                <span className="text-[11px] px-2 py-1 border border-[var(--viz-accent)] text-[var(--viz-accent)] rounded-[10px]">Phase {activePhase}</span>
               </div>
               
               <div className="flex-1 overflow-y-auto">
-                <table className="w-full border-collapse text-[11px]">
+                <table className="w-full border-collapse text-[12px] leading-normal">
                   <thead>
                     <tr>
-                      <th className="text-left text-[#888] p-2 border-b border-[var(--color-glass-border)] font-normal">Current DFA</th>
-                      <th className="text-left text-[#888] p-2 border-b border-[var(--color-glass-border)] font-normal">Symbol</th>
-                      <th className="text-left text-[#888] p-2 border-b border-[var(--color-glass-border)] font-normal">Next NFA</th>
-                      <th className="text-left text-[#888] p-2 border-b border-[var(--color-glass-border)] font-normal">Next DFA</th>
+                      <th className="text-left text-[var(--viz-text-muted)] p-2 border-b border-[var(--viz-border)] font-normal">Current DFA</th>
+                      <th className="text-left text-[var(--viz-text-muted)] p-2 border-b border-[var(--viz-border)] font-normal">Symbol</th>
+                      <th className="text-left text-[var(--viz-text-muted)] p-2 border-b border-[var(--viz-border)] font-normal">Next NFA</th>
+                      <th className="text-left text-[var(--viz-text-muted)] p-2 border-b border-[var(--viz-border)] font-normal">Next DFA</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -480,17 +493,17 @@ export function Tool() {
                           <tr
                             key={`${state}-${sym}`}
                             onClick={mappedStepIndex !== null ? () => goToStepIndex(mappedStepIndex) : undefined}
-                            className={`${isCurrentRow ? 'bg-[rgba(237,192,1,0.08)]' : ''} ${mappedStepIndex !== null ? 'cursor-pointer hover:bg-white/5' : ''}`}
+                            className={`${isCurrentRow ? 'bg-[rgba(212,83,3,0.16)]' : ''} ${mappedStepIndex !== null ? 'cursor-pointer hover:bg-[rgba(255,255,255,0.05)]' : ''}`}
                             title={mappedMeta ? `Jump to step ${mappedMeta.stepNumber}` : 'Step not available yet'}
                           >
-                            <td className="p-2 py-3 border-b border-white/5">{state}</td>
-                            <td className="p-2 py-3 border-b border-white/5">{sym}</td>
-                            <td className="p-2 py-3 border-b border-white/5">{isCurrentRow && reachableStates ? getSubsetId(reachableStates) : '-'}</td>
-                            <td className="p-2 py-3 border-b border-white/5">
+                            <td className="p-2 py-2 border-b border-white/5">{state}</td>
+                            <td className="p-2 py-2 border-b border-white/5">{sym}</td>
+                            <td className="p-2 py-2 border-b border-white/5">{isCurrentRow && reachableStates ? getSubsetId(reachableStates) : '-'}</td>
+                            <td className="p-2 py-2 border-b border-white/5">
                               <div className="flex items-center justify-between gap-2">
                                 <span>{displayedTarget}</span>
                                 {mappedStepIndex !== null && (
-                                  <span className="text-[9px] px-1.5 py-0.5 rounded border border-[var(--color-accent)]/30 text-[var(--color-accent)]">
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded border border-[var(--viz-accent)]/40 text-[var(--viz-accent)]">
                                     Step {mappedMeta?.stepNumber}
                                   </span>
                                 )}
@@ -505,13 +518,13 @@ export function Tool() {
               </div>
 
               {/* Step Insight / Ghost Merge */}
-              <div className="h-[230px] border-t border-[var(--color-glass-border)] p-4 flex flex-col gap-3 overflow-y-auto">
+              <div className="border-t border-[var(--viz-border)] p-4 flex flex-col gap-3">
                 <div className="flex items-center justify-between">
-                  <div className="text-[10px] uppercase tracking-[2px] text-[#888]">Step Insight</div>
-                  <div className="text-[10px] font-mono text-[var(--color-accent)]">Step {stepInsight.stepNumber}</div>
+                  <div className="text-[11px] uppercase tracking-[2px] text-[var(--viz-text-muted)]">Step Insight</div>
+                  <div className="text-[12px] font-mono text-[var(--viz-accent)]">Step {stepInsight.stepNumber}</div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
+                <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
                   <div className="bg-white/5 border border-white/10 rounded px-2 py-1.5">
                     <div className="text-[#666] uppercase tracking-[1px] mb-1">Action</div>
                     <div className="text-white/90">{stepInsight.action}</div>
@@ -538,7 +551,7 @@ export function Tool() {
                   </div>
                 </div>
 
-                <div className="flex gap-4 text-[10px] font-mono text-[#aaa]">
+                <div className="flex gap-4 text-[11px] font-mono text-[#c8b9ad]">
                   <span>Queue: <b className="text-white">{stepInsight.queueCount}</b></span>
                   <span>Visited: <b className="text-white">{stepInsight.visitedCount}</b></span>
                   <span>DFA States: <b className="text-white">{stepInsight.dfaStates}</b></span>
@@ -546,11 +559,11 @@ export function Tool() {
                 </div>
 
                 <div>
-                  <div className="text-[10px] uppercase tracking-[2px] text-[#888] mb-2">Subset Formation</div>
+                  <div className="text-[11px] uppercase tracking-[2px] text-[var(--viz-text-muted)] mb-2">Subset Formation</div>
                   <GhostMerge states={closureStates || reachableStates || currentSubset || []} />
                 </div>
 
-                <div className="text-[11px] text-white/75 bg-white/5 border border-white/10 rounded px-3 py-2 font-mono">
+                <div className="text-[12px] text-white/80 bg-white/5 border border-white/10 rounded px-3 py-2 font-mono">
                   {stepInsight.lastLog}
                 </div>
               </div>
@@ -558,38 +571,38 @@ export function Tool() {
           ) : (
             <>
               <div className="flex justify-between mb-5">
-                <span className="text-[11px] uppercase tracking-[1px] text-[#888]">Word Trace Simulation</span>
-                <span className={`text-[10px] px-2 py-0.5 border rounded-[10px] ${testStatus === 'accepted' ? 'border-green-500 text-green-500' : testStatus === 'rejected' ? 'border-red-500 text-red-500' : 'border-[var(--color-accent)] text-[var(--color-accent)]'}`}>
+                <span className="text-[12px] uppercase tracking-[1px] text-[var(--viz-text-muted)]">Word Trace Simulation</span>
+                <span className={`text-[11px] px-2 py-1 border rounded-[10px] ${testStatus === 'accepted' ? 'border-green-500 text-green-500' : testStatus === 'rejected' ? 'border-red-500 text-red-500' : 'border-[var(--viz-accent)] text-[var(--viz-accent)]'}`}>
                   {testStatus.toUpperCase()}
                 </span>
               </div>
               
               <div className="flex flex-col gap-6">
                 <div>
-                  <label className="block text-[10px] uppercase tracking-[2px] text-[#888] mb-2">Input Word</label>
+                  <label className="block text-[11px] uppercase tracking-[2px] text-[var(--viz-text-muted)] mb-2">Input Word</label>
                   <input 
                     type="text" 
                     value={testInput} 
                     onChange={(e) => setTestInput(e.target.value)}
                     disabled={testStatus !== 'idle'}
-                    className="w-full bg-transparent border border-white/20 rounded p-2 text-white font-mono text-sm focus:border-[var(--color-accent)] outline-none disabled:opacity-50"
+                    className="w-full bg-transparent border border-[var(--viz-border)] rounded p-3 text-white font-mono text-[16px] focus:border-[var(--viz-accent)] outline-none disabled:opacity-50"
                     placeholder="e.g. 0101"
                   />
                 </div>
                 
                 {testStatus !== 'idle' && (
                   <div>
-                    <div className="text-[10px] uppercase tracking-[2px] text-[#888] mb-2">Trace Progress</div>
+                    <div className="text-[11px] uppercase tracking-[2px] text-[var(--viz-text-muted)] mb-2">Trace Progress</div>
                     <div className="flex gap-1 font-mono text-lg mb-4">
                       {testInput.split('').map((char, i) => (
-                        <span key={i} className={`${i < testStep ? 'text-[#888]' : i === testStep ? 'text-[var(--color-accent)] border-b-2 border-[var(--color-accent)]' : 'text-white'}`}>
+                        <span key={i} className={`${i < testStep ? 'text-[var(--viz-text-muted)]' : i === testStep ? 'text-[var(--viz-accent)] border-b-2 border-[var(--viz-accent)]' : 'text-white'}`}>
                           {char}
                         </span>
                       ))}
                     </div>
                     
-                    <div className="text-[10px] uppercase tracking-[2px] text-[#888] mb-2">Current Step Explanation</div>
-                    <div className="text-[12px] text-white/80 bg-white/5 p-3 rounded border border-white/10">
+                    <div className="text-[11px] uppercase tracking-[2px] text-[var(--viz-text-muted)] mb-2">Current Step Explanation</div>
+                    <div className="text-[13px] text-white/85 bg-white/5 p-3 rounded border border-white/10 leading-relaxed">
                       {logs.length > 0 ? logs[logs.length - 1] : 'Waiting to start...'}
                     </div>
                   </div>
@@ -602,16 +615,16 @@ export function Tool() {
 
         {/* Right: DFA Graph */}
         {fullscreenDiagram !== 'nfa' && (
-        <div className="bg-black p-6 flex flex-col">
+        <div className="bg-[var(--viz-panel-bg)] p-6 flex flex-col">
           <div className="flex justify-between mb-5">
-            <span className="text-[11px] uppercase tracking-[1px] text-[#888]">DFA Target Result</span>
+            <span className="text-[12px] uppercase tracking-[1px] text-[var(--viz-text-muted)]">DFA Target Result</span>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] px-2 py-0.5 border border-white text-white rounded-[10px]">
+              <span className="text-[11px] px-2 py-1 border border-[var(--viz-accent)] text-[#ffd8bf] rounded-[10px]">
                 {activePhase === 4 ? 'Complete' : 'Building...'}
               </span>
               <button
                 onClick={() => setFullscreenDiagram(fullscreenDiagram === 'dfa' ? 'none' : 'dfa')}
-                className="text-[10px] px-2 py-0.5 border border-white/20 rounded-[10px] text-white hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors flex items-center gap-1"
+                className="viz-btn-outline text-[11px] px-2 py-1 rounded-[10px] transition-colors flex items-center gap-1"
               >
                 {fullscreenDiagram === 'dfa' ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
                 {fullscreenDiagram === 'dfa' ? 'Exit Fullscreen' : 'Fullscreen'}
@@ -636,28 +649,28 @@ export function Tool() {
       </div>
 
       {/* Bottom: Log Panel / Simulation HUD */}
-      <div className="absolute bottom-0 left-0 w-full h-[60px] bg-[#050505] border-t border-[var(--color-glass-border)] flex items-center px-10 box-border overflow-hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+      <div className="absolute bottom-0 left-0 w-full h-[72px] bg-[#070605] border-t border-[var(--viz-border)] flex items-center px-10 box-border overflow-hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div className="flex items-center gap-4 w-full">
           <div className="flex flex-col shrink-0">
-            <span className="text-[var(--color-accent)] text-[9px] font-bold uppercase tracking-[2px]">System Monitor</span>
+            <span className="text-[var(--viz-accent)] text-[10px] font-bold uppercase tracking-[2px]">System Monitor</span>
             <div className="flex gap-1 mt-1">
-              <div className="w-1 h-1 rounded-full bg-[var(--color-accent)] animate-pulse" />
-              <div className="w-1 h-1 rounded-full bg-[var(--color-accent)]/40" />
-              <div className="w-1 h-1 rounded-full bg-[var(--color-accent)]/20" />
+              <div className="w-1 h-1 rounded-full bg-[var(--viz-accent)] animate-pulse" />
+              <div className="w-1 h-1 rounded-full bg-[var(--viz-accent)]/40" />
+              <div className="w-1 h-1 rounded-full bg-[var(--viz-accent)]/20" />
             </div>
           </div>
           
           <div className="h-8 w-[1px] bg-white/10 mx-4" />
           
-          <div className="flex-1 font-mono text-[12px] text-white/90 truncate flex items-center gap-3">
+          <div className="flex-1 font-mono text-[13px] text-white/90 truncate flex items-center gap-3">
             {logs.length > 0 ? (
               <>
-                <span className="text-[var(--color-accent)] opacity-50">[{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
+                <span className="text-[var(--viz-accent)] opacity-60">[{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
                 <span className="text-white/40">{'>'}</span>
                 <span className="tracking-tight italic whitespace-nowrap overflow-hidden text-ellipsis">
                   {logs[logs.length - 1].split(']').length > 1 ? (
                     <>
-                      <b className="text-[var(--color-accent)] not-italic mr-2">{logs[logs.length - 1].split(']')[0] + ']'}</b>
+                      <b className="text-[var(--viz-accent)] not-italic mr-2">{logs[logs.length - 1].split(']')[0] + ']'}</b>
                       {logs[logs.length - 1].split(']')[1]}
                     </>
                   ) : logs[logs.length - 1]}
@@ -670,8 +683,8 @@ export function Tool() {
 
           <div className="flex gap-4 shrink-0">
             <div className="flex flex-col items-end">
-              <span className="text-[8px] uppercase tracking-[1px] text-[#444]">Complexity</span>
-              <span className="text-[10px] text-white font-mono">{nfa.states.length}S / {dfa.states.length}D</span>
+              <span className="text-[10px] uppercase tracking-[1px] text-[#7f6c5f]">Complexity</span>
+              <span className="text-[11px] text-white font-mono">{nfa.states.length}S / {dfa.states.length}D</span>
             </div>
           </div>
         </div>

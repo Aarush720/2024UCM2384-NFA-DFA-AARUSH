@@ -42,6 +42,7 @@ interface AutomataState {
   stepBackward: () => void;
   goToStepIndex: (index: number) => void;
   reset: () => void;
+  goHome: () => void;
   
   // Testing actions
   setTestInput: (input: string) => void;
@@ -106,7 +107,7 @@ export const useAutomataStore = create<AutomataState>((set, get) => ({
   activePhase: 1,
   logs: [],
   
-  testInput: '',
+  testInput: 'na',
   testStep: 0,
   testStatus: 'idle',
   activeNFAStates: [],
@@ -134,7 +135,7 @@ export const useAutomataStore = create<AutomataState>((set, get) => ({
       logs: [`Loaded custom NFA with ${nfa.states.length} states.`],
       history: [],
       canStepBackward: false,
-      testInput: '',
+      testInput: 'na',
       testStep: 0,
       testStatus: 'idle',
       activeNFAStates: [],
@@ -393,6 +394,45 @@ export const useAutomataStore = create<AutomataState>((set, get) => ({
   },
   
   reset: () => {
+    const { nfa } = get();
+    const startClosure = epsilonClosure(nfa, [nfa.start]);
+    const startId = getSubsetId(startClosure);
+
+    set({
+      dfa: {
+        states: [startId],
+        alphabet: nfa.alphabet,
+        transitions: {},
+        start: startId,
+        accept: startClosure.some(s => nfa.accept.includes(s)) ? [startId] : [],
+      },
+      stableDfa: {
+        states: [startId],
+        alphabet: nfa.alphabet,
+        transitions: {},
+        start: startId,
+        accept: startClosure.some(s => nfa.accept.includes(s)) ? [startId] : [],
+      },
+      transitionSteps: {},
+      unvisited: [startClosure],
+      visited: [],
+      currentSubset: null,
+      currentSymbol: null,
+      reachableStates: null,
+      closureStates: null,
+      activePhase: 3,
+      logs: [`Initialized with ε-closure(start) = ${startId}`],
+      history: [],
+      canStepBackward: false,
+      testStatus: 'idle',
+      testStep: 0,
+      testInput: 'na',
+      activeNFAStates: [],
+      activeDFAState: null,
+    });
+  },
+
+  goHome: () => {
     set({
       dfa: {
         states: [],
@@ -421,6 +461,7 @@ export const useAutomataStore = create<AutomataState>((set, get) => ({
       canStepBackward: false,
       testStatus: 'idle',
       testStep: 0,
+      testInput: 'na',
       activeNFAStates: [],
       activeDFAState: null,
     });

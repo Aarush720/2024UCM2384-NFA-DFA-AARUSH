@@ -1,7 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+@font-face {
+  font-family: Panchang;
+  src: url('https://cdn.prod.website-files.com/6891fea56371a402aee851dc/6891fea56371a402aee85286_Panchang-Extrabold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Helvetica Neue", Arial, sans-serif;
+  --font-sans: 'Space Mono', 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  --font-display: Panchang, Arial, sans-serif;
   --color-accent: #EDC001;
   --color-glass: rgba(255, 255, 255, 0.03);
   --color-glass-border: rgba(255, 255, 255, 0.1);
@@ -12,7 +23,208 @@
   body {
     @apply bg-black text-white antialiased;
     font-family: var(--font-sans);
+    line-height: 1.1;
   }
+}
+
+.aurelia-landing {
+  background: #090909;
+}
+
+.aurelia-noise {
+  background-image:
+    repeating-radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.11) 0 1px, rgba(0, 0, 0, 0) 1px 3px),
+    repeating-radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.2) 0 1px, rgba(0, 0, 0, 0) 1px 4px),
+    repeating-radial-gradient(circle at 50% 50%, rgba(255, 180, 130, 0.05) 0 1px, rgba(0, 0, 0, 0) 1px 6px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0, rgba(255, 255, 255, 0.04) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 3px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.032) 0, rgba(255, 255, 255, 0.032) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 3px),
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0) 35%),
+    radial-gradient(circle at 80% 70%, rgba(255, 145, 0, 0.08) 0, rgba(255, 145, 0, 0) 30%),
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.02) 0,
+      rgba(255, 255, 255, 0.02) 1px,
+      rgba(0, 0, 0, 0) 1px,
+      rgba(0, 0, 0, 0) 40px
+    );
+  background-size: 110px 110px, 140px 140px, 190px 190px, 3px 3px, 3px 3px, auto, auto, auto;
+  background-blend-mode: screen, multiply, soft-light, soft-light, soft-light, normal, normal, normal;
+  opacity: 0.78;
+}
+
+.aurelia-vignette {
+  background: radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0.68) 100%);
+}
+
+.aurelia-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.aurelia-mono {
+  font-family: var(--font-sans);
+}
+
+.aurelia-chip {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  background: rgba(11, 11, 11, 0.7);
+  color: #fff9ee;
+  padding: 8px 16px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1), border-color 180ms ease;
+}
+
+.aurelia-chip:hover {
+  border-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.aurelia-chip:active {
+  transform: scale(0.97);
+}
+
+.aurelia-chip-accent {
+  border-color: rgba(212, 83, 3, 0.75);
+  background: linear-gradient(90deg, rgba(70, 35, 17, 0.8), rgba(212, 83, 3, 0.65));
+}
+
+.aurelia-cta {
+  border: 1px solid rgba(212, 83, 3, 0.7);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2e1a10 0%, #d45303 100%);
+  color: #fff9ee;
+  padding: 12px 26px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  box-shadow: 0 18px 34px -18px rgba(212, 83, 3, 0.95);
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms ease;
+}
+
+.aurelia-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 40px -16px rgba(212, 83, 3, 0.95);
+}
+
+.aurelia-cta:active {
+  transform: scale(0.97);
+}
+
+.aurelia-panel {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 16px;
+}
+
+.aurelia-panel-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 249, 238, 0.58);
+}
+
+.aurelia-panel-title {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 36px);
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff9ee;
+}
+
+.aurelia-panel-copy {
+  margin-top: 10px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 249, 238, 0.7);
+}
+
+.aurelia-readable {
+  font-family: var(--font-sans);
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+}
+
+.viz-shell {
+  --viz-accent: #d45303;
+  --viz-text-muted: #b8aea2;
+  --viz-border: rgba(212, 83, 3, 0.24);
+  --viz-panel-bg: #0a0908;
+  background:
+    repeating-radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.06) 0 1px, rgba(0, 0, 0, 0) 1px 4px),
+    repeating-radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.14) 0 1px, rgba(0, 0, 0, 0) 1px 5px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0, rgba(255, 255, 255, 0.018) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 3px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0, rgba(255, 255, 255, 0.015) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 3px),
+    radial-gradient(circle at 14% -10%, rgba(212, 83, 3, 0.18), rgba(0, 0, 0, 0) 42%),
+    radial-gradient(circle at 85% 118%, rgba(255, 166, 84, 0.12), rgba(0, 0, 0, 0) 45%),
+    #060504;
+  background-size: 130px 130px, 170px 170px, 3px 3px, 3px 3px, auto, auto, auto;
+  background-blend-mode: screen, multiply, soft-light, soft-light, normal, normal, normal;
+}
+
+.viz-shell .viz-btn {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: var(--font-sans);
+  color: #fff4ea;
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1), border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.viz-shell .viz-btn:hover {
+  transform: translateY(-1px);
+}
+
+.viz-shell .viz-btn:active {
+  transform: scale(0.98);
+}
+
+.viz-shell .viz-btn-primary {
+  border-radius: 999px;
+  border: 1px solid rgba(212, 83, 3, 0.78);
+  background: linear-gradient(90deg, #2b1a12 0%, #d45303 100%);
+  color: #fff4ea;
+}
+
+.viz-shell .viz-btn-outline,
+.viz-shell .viz-btn-outline-active {
+  border: 1px solid rgba(212, 83, 3, 0.62);
+  background: rgba(0, 0, 0, 0.2);
+  color: #ffd7bc;
+}
+
+.viz-shell .viz-btn-outline:hover,
+.viz-shell .viz-btn-outline-active:hover {
+  border-color: rgba(212, 83, 3, 0.9);
+  color: #fff3e7;
+}
+
+.viz-shell .viz-btn-outline-active {
+  background: rgba(212, 83, 3, 0.16);
+}
+
+.viz-shell .viz-btn-ghost {
+  border: none;
+  background: transparent;
+  color: var(--viz-text-muted);
+  cursor: pointer;
+  transition: color 180ms ease;
+}
+
+.viz-shell .viz-btn-ghost:hover {
+  color: #fff4ea;
 }
 
 /* Glass morphism utilities */
