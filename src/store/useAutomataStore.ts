@@ -265,7 +265,7 @@ export const useAutomataStore = create<AutomataState>((set, get) => ({
         if (!nextTransitionSteps[transitionKey]) {
           nextTransitionSteps[transitionKey] = {
             stepNumber: Object.keys(nextTransitionSteps).length + 1,
-            stepIndex: nextHistory.length,
+            stepIndex: Math.max(0, nextHistory.length - 1),
             to: toId,
           };
         }
@@ -289,7 +289,7 @@ export const useAutomataStore = create<AutomataState>((set, get) => ({
         if (!nextTransitionSteps[transitionKey]) {
           nextTransitionSteps[transitionKey] = {
             stepNumber: Object.keys(nextTransitionSteps).length + 1,
-            stepIndex: nextHistory.length,
+            stepIndex: Math.max(0, nextHistory.length - 1),
             to: toId,
           };
         }
